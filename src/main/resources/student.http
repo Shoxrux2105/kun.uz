@@ -1,9 +1,9 @@
 ### Create Student
-POST localhost:8080/student
+POST localhost:8081/student
 Content-Type: application/json
 
 {
-  "name":"Vali",
+  "name":"Alish",
   "surname":"Valiyev",
   "age":19
 }
@@ -26,3 +26,16 @@ Content-Type: application/json
 
 ### Delete
 GET localhost:8080/student/2
+
+
+
+### Filter
+POST localhost:8081/student/filter?page=1&size=10
+Content-Type: application/json
+
+{
+  "surname": "Valiyev"
+}
+
+
+
