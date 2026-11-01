@@ -1,27 +1,34 @@
 package dasturlash.uz.dto;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PositiveOrZero;
-import jakarta.validation.constraints.Size;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+import java.time.LocalDateTime;
+
+@Getter
+@Setter
 public class RegionDTO {
+    private Integer id;
 
-    @NotNull(message = "Tartib raqami kiritilishi kerak")
-    @PositiveOrZero(message = "Tartib raqami manfiy bo'lmasligi kerak")
+    @NotNull(message = "OrderNumber required")
+    @Min(value = 1, message = "OrderNumber have to higher than 0")
     private Integer orderNumber;
 
-    @NotBlank(message = "O'zbekcha nom kiritilishi kerak")
-    @Size(max = 100, message = "O'zbekcha nom 100 ta belgidan oshmasligi kerak")
+    @NotBlank(message = "NameUz required")
     private String nameUz;
 
-    @NotBlank(message = "Ruscha nom kiritilishi kerak")
-    @Size(max = 100, message = "Ruscha nom 100 ta belgidan oshmasligi kerak")
+    @NotBlank(message = "NameRu required")
     private String nameRu;
 
-    @NotBlank(message = "Inglizcha nom kiritilishi kerak")
-    @Size(max = 100, message = "Inglizcha nom 100 ta belgidan oshmasligi kerak")
+    @NotBlank(message = "NameEn required")
     private String nameEn;
+
+    @NotBlank(message = "RegionKey required")
+    private String regionKey;
+
+    private LocalDateTime createdDate;
+    private String name;
 }
