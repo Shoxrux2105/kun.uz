@@ -1,6 +1,5 @@
 package dasturlash.uz.service;
 
-import dasturlash.uz.entity.ProfileEntity;
 import dasturlash.uz.entity.ProfileRoleEntity;
 import dasturlash.uz.enums.ProfileRoleEnum;
 import dasturlash.uz.repository.ProfileRoleRepository;
@@ -25,21 +24,8 @@ public class ProfileRoleService {
 
     public void merge(Integer profileId, List<ProfileRoleEnum> newList) {
         List<ProfileRoleEnum> oldList = profileRoleRepository.getRoleListByProfileId(profileId);
-
-        //newList.stream().filter(n -> !oldList.contains(n)).forEach(pe -> create(profileId, pe)); // create
-        for(ProfileRoleEnum nR: newList){ // create
-            if(!oldList.contains(nR)){
-                create(profileId, nR);
-            }
-        }
-
-      //  oldList.stream().filter(old -> !newList.contains(old)).forEach(pe -> profileRoleRepository.deleteByIdAndRoleEnum(profileId, pe));
-
-        for(ProfileRoleEnum oR: oldList){ // update
-            if(!newList.contains(oR)){
-                profileRoleRepository.deleteByIdAndRoleEnum(profileId, oR);
-            }
-        }
+        newList.stream().filter(n -> !oldList.contains(n)).forEach(pe -> create(profileId, pe)); // create
+        oldList.stream().filter(old -> !newList.contains(old)).forEach(pe -> profileRoleRepository.deleteByIdAndRoleEnum(profileId, pe));
     }
 
     // old -> "ROLE_USER", "ROLE_ADMIN"

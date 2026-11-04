@@ -1,10 +1,14 @@
 package dasturlash.uz.service;
 
+import dasturlash.uz.dto.FilterResultDTO;
 import dasturlash.uz.dto.profile.*;
 import dasturlash.uz.entity.ProfileEntity;
+import dasturlash.uz.enums.ProfileRoleEnum;
 import dasturlash.uz.enums.ProfileStatus;
 import dasturlash.uz.exception.AppBadException;
+import dasturlash.uz.repository.ProfileCustomRepository;
 import dasturlash.uz.repository.ProfileRepository;
+import dasturlash.uz.util.MapperUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -22,6 +26,8 @@ public class ProfileService {
     private ProfileRoleService profileRoleService;
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Autowired
+    private ProfileCustomRepository profileCustomRepository;
 
     public ProfileDTO create(ProfileDTO profile) {
         Optional<ProfileEntity> optional = profileRepository.findByUsernameAndVisibleIsTrue(profile.getUsername());
@@ -116,6 +122,13 @@ public class ProfileService {
         return true;
     }
 
+    public PageImpl<ProfileDTO> filter(ProfileFilterDTO filterDTO, int page, int size) {
+        FilterResultDTO<Object[]> result = profileCustomRepository.filter(filterDTO, page, size);
+        List<ProfileDTO> profileDTOList = new LinkedList<>();
+        result.getContent().forEach(entity -> profileDTOList.add(toDTO(entity)));
+        return new PageImpl<>(profileDTOList, PageRequest.of(page, size), result.getTotal());
+    }
+
     public ProfileDTO toDTO(ProfileEntity entity) {
         ProfileDTO dto = new ProfileDTO();
         dto.setId(entity.getId());
@@ -123,6 +136,20 @@ public class ProfileService {
         dto.setSurname(entity.getSurname());
         dto.setUsername(entity.getUsername());
         dto.setCreatedDate(entity.getCreatedDate());
+        return dto;
+    }
+
+    public ProfileDTO toDTO(Object[] mapper) {
+        ProfileDTO dto = new ProfileDTO();
+        dto.setId((Integer) mapper[0]);
+        dto.setName((String) mapper[1]);
+        dto.setSurname((String) mapper[2]);
+        dto.setUsername((String) mapper[3]);
+        if (mapper[4] != null) {
+            dto.setStatus(ProfileStatus.valueOf((String) mapper[4]));
+        }
+        dto.setCreatedDate(MapperUtil.localDateTime(mapper[5]));
+        dto.setRoleList(ProfileRoleEnum.values((String[]) mapper[6]));
         return dto;
     }
 

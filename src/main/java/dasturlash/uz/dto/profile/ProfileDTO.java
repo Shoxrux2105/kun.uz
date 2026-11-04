@@ -2,6 +2,7 @@ package dasturlash.uz.dto.profile;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import dasturlash.uz.enums.ProfileRoleEnum;
+import dasturlash.uz.enums.ProfileStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
@@ -23,7 +24,7 @@ public class ProfileDTO {
     private String surname;
 
     @NotBlank(message = "Username  bo‘sh bo‘lmasligi kerak")
-    private String username; // email, phone,
+    private String username;
 
     @NotBlank(message = "Parol bo‘sh bo‘lmasligi kerak")
     private String password;
@@ -32,4 +33,5 @@ public class ProfileDTO {
     private List<ProfileRoleEnum> roleList;
 
     private LocalDateTime createdDate;
+    private ProfileStatus status;
 }
